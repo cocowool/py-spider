@@ -1,5 +1,9 @@
-#coding=utf-8
-# 介绍三种不同方式获取单个页面的方法
+# coding=utf-8
+# 获取单个页面的内容
+
+import re
+import urllib.request
+import ssl
 
 import os
 import sys
@@ -10,18 +14,38 @@ import codecs
 sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 sys.path.append(os.getcwd())
 
-import urllib3
-import urllib3.request
+def getHtml(url):
+    page = urllib.request.urlopen(url)
+    html = page.read()
+    html = html.decode('utf-8')
+    return html
+
+ssl._create_default_https_context = ssl._create_unverified_context
+url = 'https://www.baidu.com/s?ie=utf-8&wd=kubernetes'
+header = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11"}
+html = getHtml(url, header)
+
+print(html)
+
+# import urllib3
 # import urllib.request
 # # from urllib.request import request
 # from urllib3 import urlopen
 
 # 使用 urllib 方式获取
-response = urllib3.request.urlopen('http://www.baidu.com/s?ie=utf-8&wd=国双科技')
-# 打印服务器返回的状态码
-print(response.code)
-# read() 读取的是服务器的原始返回数据 decode() 后会进行转码
-print(response.read().decode('utf-8'))
+url = 'http://www.baidu.com/s?ie=utf-8&wd=kubernetes'
+header = headers = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11"}
+
+request = urllib.request.Request(url,headers=header)
+res = urllib.request.urlopen(request)
+
+# response = urllib.request.urlopen('http://www.baidu.com/s?ie=utf-8&wd=kubernetes')
+# # 打印服务器返回的状态码
+# print(response.code)
+# # read() 读取的是服务器的原始返回数据 decode() 后会进行转码
+# print(response.read().decode('utf-8'))
 
 
 # # import urllib2
