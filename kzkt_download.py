@@ -6,10 +6,8 @@
 # 入口页面地址： https://cache.bdschool.cn/public/bdschool/index/static/migu/w.html?grade=3&_d=2020/10/25
 import os, sys, getopt
 import re
-# from bs4 import BeautifulSoup
-# import requests
-
-print("Hello World")
+from bs4 import BeautifulSoup
+import requests
 
 class kzkt():
     # 通过requests方式获取网页内容
@@ -27,3 +25,15 @@ class kzkt():
         response = requests.get(url, headers = my_headers, cookies = my_cookie)
 
         return response.text
+
+    # 遍历需要下载的视频和视频标题
+    def parse_video(self, html):
+        soup = BeautifulSoup(html, 'html.parser')
+        work_table = soup.find('span', attrs={'class':'content_table'}).contents
+        print(work_table)
+        pass
+
+# 实例化
+url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/w.html?grade=3&_d=2020/11/23"
+dog = kzkt()
+dog.parse_video(dog.get_html)
