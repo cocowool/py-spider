@@ -9,6 +9,8 @@ import re
 # from bs4 import BeautifulSoup
 # import requests
 
+print("Hello World")
+
 class kzkt():
     # 通过requests方式获取网页内容
     def get_html(self, url, method = "requests"):
