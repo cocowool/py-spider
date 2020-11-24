@@ -34,22 +34,36 @@ class kzkt():
         print(len(work_table))
         pass
 
+    # 将内容保存为文件
+    def save_file(self, contents, file_name):
+        with open(file_name, "wb") as file_obj:
+            file_obj.write(contents)
+        pass
+
     # 下载页面中的视频及课件
     def download_video(self, url):
         response = requests.get(url)
         soup = BeautifulSoup(response.text, 'html.parser')
 
+        # 获取课程名称
+        lesson_name = soup.find('span', attrs = {'id':'album_lesson_name'})
+        print(lesson_name.text)
+
+        # 获取视频资源的链接地址
+        video_url = re.search(r'videourl="(.*)"', response.text).group(1).strip()
+
+        self.save_file( requests.get(video_url), lesson_name.text + ".mp4" )
+
         # print(response.text)
-        # print(soup.find_all('video'))
-        print(soup.find_all('a', attrs={'class':'file_view_list'}))
+        # print(soup.find_all('script'))
 
-        file_name = '1123.ppt'
-        ppt_url = "https://cache.bdschool.cn/index.php?app=interface&mod=Resource&act=download&id=872462"
-        file_res = requests.get(ppt_url)
-        with open(file_name, "wb") as ppt:
-            ppt.write(file_res.content)
 
+        # print(soup.find_all('a', attrs={'class':'file_view_list'}))
+        # file_name = '1123.ppt'
+        # ppt_url = "https://cache.bdschool.cn/index.php?app=interface&mod=Resource&act=download&id=872462"
+        # file_res = requests.get(ppt_url)
         pass
+
 
 # 实例化
 course_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/w.html?grade=3&_d=2020/11/23"
