@@ -8,6 +8,7 @@ import os, sys, getopt
 import re
 from bs4 import BeautifulSoup
 import requests
+import time
 
 class kzkt():
     # 通过requests方式获取网页内容
@@ -40,6 +41,44 @@ class kzkt():
             file_obj.write(contents)
         pass
 
+    # 请求视频地址并保存为文件
+    def save_video(self, video_url, file_name):
+        response = requests.head(url=video_url)
+        headers = {}
+
+        try:
+            total_file_size = int(response.headers['Content-Length'])
+        except Exception as e:
+            print(e.args)
+
+        if not os.path.exists(file_name):
+            with open(file_name, 'ab+') as f:
+                pass
+        
+        file_size = os.path.getsize(file_name)
+        download_flag = True
+        while download_flag:
+            try:
+                file_size = os.path.getsize(file_name)
+                headers['Range'] = 'bytes=%d-' % file_size
+                response = requests.get(url=video_url, headers=headers, stream=True, timeout=20)
+                with open(file_name, 'ab+') as f:
+                    for chunk in response.iter_content(chunk_size = 4096):
+                        if response.status_code == 206:
+                            if chunk:
+                                f.write(chunk)
+                        elif os.path.getsize(file_name) >= total_file_size:
+                            download_flag = False
+                            return file_name
+                        else:
+                            time.sleep(3)
+                            break
+            except Exception as e:
+                print(e.args)
+
+        print(total_file_size)
+        pass
+
     # 下载页面中的视频及课件
     def download_video(self, url):
         response = requests.get(url)
@@ -52,7 +91,7 @@ class kzkt():
         # 获取视频资源的链接地址
         video_url = re.search(r'videourl="(.*)"', response.text).group(1).strip()
 
-        self.save_file( requests.get(video_url), lesson_name.text + ".mp4" )
+        self.save_video( video_url, lesson_name.text + ".mp4" )
 
         # print(response.text)
         # print(soup.find_all('script'))
