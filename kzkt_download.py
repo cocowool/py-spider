@@ -45,6 +45,9 @@ class kzkt():
 
         file_name = '1123.ppt'
         ppt_url = "https://cache.bdschool.cn/index.php?app=interface&mod=Resource&act=download&id=872462"
+        file_res = requests.get(ppt_url)
+        with open(file_name, "wb") as ppt:
+            ppt.write(file_res.content)
 
         pass
 
