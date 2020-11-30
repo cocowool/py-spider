@@ -80,7 +80,7 @@ class kzkt():
         pass
 
     # 下载页面中的视频及课件
-    def download_video(self, url):
+    def download_video(self, url, save_folder):
         response = requests.get(url)
         soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -91,7 +91,12 @@ class kzkt():
         # 获取视频资源的链接地址
         video_url = re.search(r'videourl="(.*)"', response.text).group(1).strip()
 
-        self.save_video( video_url, lesson_name.text + ".mp4" )
+        # 判断并创建文件夹
+        if os.path.exists(save_folder):
+            self.save_video( video_url, save_folder + "/" + lesson_name.text + ".mp4" )
+        else:
+            os.makedirs(r"" + save_folder)
+            self.save_video( video_url, save_folder + "/" + lesson_name.text + ".mp4" )
 
         # print(response.text)
         # print(soup.find_all('script'))
@@ -105,9 +110,9 @@ class kzkt():
 
 
 # 实例化
-course_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/w.html?grade=3&_d=2020/11/23"
+course_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/w.html?grade=3"
 video_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/weike/0bf79a3ba787b32a7ed2df8844e7dd8e.html?grade_id=3&subject_id=1"
 dog = kzkt()
 # dog.parse_video(dog.get_html(url))
 
-dog.download_video(video_url)
+dog.download_video(video_url, 'videos')
