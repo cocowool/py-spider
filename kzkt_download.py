@@ -43,13 +43,23 @@ class kzkt():
 
     # 请求视频地址并保存为文件
     def save_video(self, video_url, file_name):
+        start_time = time.time()
+        chunk_size = 4096
+
         response = requests.head(url=video_url)
         headers = {}
+
+        # 初始化当前下载完成的文件大小
+        size = 0
 
         try:
             total_file_size = int(response.headers['Content-Length'])
         except Exception as e:
+            print("get header error")
             print(e.args)
+
+        print( total_file_size )
+        print('Start download, [File size]:{size:.2f} MB'.format(size = total_file_size / chunk_size / 1024))
 
         if not os.path.exists(file_name):
             with open(file_name, 'ab+') as f:
@@ -63,21 +73,26 @@ class kzkt():
                 headers['Range'] = 'bytes=%d-' % file_size
                 response = requests.get(url=video_url, headers=headers, stream=True, timeout=20)
                 with open(file_name, 'ab+') as f:
-                    for chunk in response.iter_content(chunk_size = 4096):
+                    for chunk in response.iter_content(chunk_size = chunk_size):
                         if response.status_code == 206:
                             if chunk:
                                 f.write(chunk)
+                                size += len(chunk)
+                                print('\r' + '[Download progress]:%s%.2f%%' % ('>' * int(size * 50 / total_file_size), float(size/total_file_size*100)), end=' ')
                         elif os.path.getsize(file_name) >= total_file_size:
                             download_flag = False
                             return file_name
                         else:
+                            print("program sleep")
                             time.sleep(3)
                             break
             except Exception as e:
+                print("download error:")
                 print(e.args)
 
-        print(total_file_size)
-        pass
+        end_time = time.time()
+
+        print('Download completed!, times: %.2f seconds' % (end_time - start_time))
 
     # 下载页面中的视频及课件
     def download_video(self, url, save_folder):
