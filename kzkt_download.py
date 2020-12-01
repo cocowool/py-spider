@@ -59,7 +59,7 @@ class kzkt():
             print(e.args)
 
         print( total_file_size )
-        print('Start download, [File size]:{size:.2f} MB'.format(size = total_file_size / chunk_size / 1024))
+        print('Start download, [File size]:{size:.2f} MB'.format(size = total_file_size / 1024))
 
         if not os.path.exists(file_name):
             with open(file_name, 'ab+') as f:
@@ -78,7 +78,7 @@ class kzkt():
                             if chunk:
                                 f.write(chunk)
                                 size += len(chunk)
-                                print('\r' + '[Download progress]:%s%.2f%%' % ('>' * int(size * 50 / total_file_size), float(size/total_file_size*100)), end=' ')
+                                print('\r' + '[Download progress]:%s%.2f%\n' % ('>' * int(size * 50 / total_file_size), float(size/total_file_size*100)) )
                         elif os.path.getsize(file_name) >= total_file_size:
                             download_flag = False
                             return file_name
