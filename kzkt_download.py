@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # 抓取空中课堂学习资料，整理并保存。
 
+# @TODO 设置一个DEBUG变量，DEBUG开启的时候，只打印需要下载的连接，保存的目标地址以及文件名，但不执行真正的下载
+
 # https://cache.bdschool.cn/public/bdschool/index/static/migu/w.html?grade=3
 
 # 入口页面地址： https://cache.bdschool.cn/public/bdschool/index/static/migu/w.html?grade=3&_d=2020/10/25
@@ -126,7 +128,8 @@ class kzkt():
     # 下载视频页面的文件
     def download_file(self, file_url, save_folder):
         response = requests.head(url=file_url)
-        print(response)
+        # print(response.headers)
+        print(response.headers['Content-Disposition'].decode('utf-8'))
         pass
 
 
