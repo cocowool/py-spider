@@ -11,6 +11,7 @@ import re
 from bs4 import BeautifulSoup
 import requests
 import time
+import cgi
 
 class kzkt():
     # 通过requests方式获取网页内容
@@ -129,7 +130,10 @@ class kzkt():
     def download_file(self, file_url, save_folder):
         response = requests.head(url=file_url)
         # print(response.headers)
-        print(response.headers['Content-Disposition'].decode('utf-8'))
+        print(response.headers['Content-Disposition'])
+        value, params = cgi.parse_header(response.headers['Content-Disposition'])
+        print(value)
+        print(params)
         pass
 
 
