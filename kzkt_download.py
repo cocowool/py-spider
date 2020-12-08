@@ -123,11 +123,20 @@ class kzkt():
         # file_res = requests.get(ppt_url)
         pass
 
+    # 下载视频页面的文件
+    def download_file(self, file_url, save_folder):
+        response = requests.head(url=file_url)
+        print(response)
+        pass
+
 
 # 实例化
 course_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/w.html?grade=3"
 video_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/weike/0bf79a3ba787b32a7ed2df8844e7dd8e.html?grade_id=3&subject_id=1"
+file_url = "https://cache.bdschool.cn/index.php?app=interface&mod=Resource&act=download&id=908001"
+
 dog = kzkt()
 # dog.parse_video(dog.get_html(url))
 
-dog.download_video(video_url, 'videos')
+# dog.download_video(video_url, 'videos')
+dog.download_file(file_url, 'videos')
