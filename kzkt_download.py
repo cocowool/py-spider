@@ -129,11 +129,12 @@ class kzkt():
     # 下载视频页面的文件
     def download_file(self, file_url, save_folder):
         response = requests.head(url=file_url)
-        # print(response.headers)
-        print(response.headers['Content-Disposition'])
-        value, params = cgi.parse_header(response.headers['Content-Disposition'])
+        print(response.headers)
+        print(response.headers['Content-Disposition'].encode('utf-8'))
+        print(type(response.headers['Content-Disposition']))
+        value, params = cgi.parse_header( response.headers['Content-Disposition'] )
         print(value)
-        print(params)
+        print(params['filename'].encode('utf-8').decode('gbk'))
         pass
 
 
