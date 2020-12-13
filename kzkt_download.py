@@ -76,6 +76,7 @@ class kzkt():
                 headers['Range'] = 'bytes=%d-' % file_size
                 response = requests.get(url=video_url, headers=headers, stream=True, timeout=20)
                 with open(file_name, 'ab+') as f:
+                    # 请求没有被显示的关闭，可能会有性能问题
                     for chunk in response.iter_content(chunk_size = chunk_size):
                         if response.status_code == 206:
                             if chunk:
@@ -129,19 +130,20 @@ class kzkt():
     # 下载视频页面的文件
     def download_file(self, file_url, save_folder):
         response = requests.head(url=file_url)
-        print(response.headers)
+        # print(response.headers)
         print(response.headers['Content-Disposition'].encode('utf-8'))
         print(type(response.headers['Content-Disposition']))
         value, params = cgi.parse_header( response.headers['Content-Disposition'] )
         print(value)
-        print(params['filename'].encode('utf-8').decode('gbk'))
+        print(params['filename'])
         pass
 
 
 # 实例化
 course_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/w.html?grade=3"
 video_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/weike/0bf79a3ba787b32a7ed2df8844e7dd8e.html?grade_id=3&subject_id=1"
-file_url = "https://cache.bdschool.cn/index.php?app=interface&mod=Resource&act=download&id=908001"
+# file_url = "https://cache.bdschool.cn/index.php?app=interface&mod=Resource&act=download&id=908001"
+file_url = "https://cache.bdschool.cn/index.php?app=interface&mod=Resource&act=download&id=872507"
 
 dog = kzkt()
 # dog.parse_video(dog.get_html(url))
