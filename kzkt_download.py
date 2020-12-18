@@ -30,14 +30,6 @@ class kzkt():
 
         return response.text
 
-    # 遍历需要下载的视频和视频标题
-    def parse_video(self, html):
-        # print(type(html))
-        soup = BeautifulSoup(html, 'html.parser')
-        work_table = soup.find_all('table', attrs={'class':'content_table', 'grade' : '3'})
-        print(len(work_table))
-        pass
-
     # 将内容保存为文件
     def save_file(self, contents, file_name):
         with open(file_name, "wb") as file_obj:
@@ -130,14 +122,35 @@ class kzkt():
     # 下载视频页面的文件
     def download_file(self, file_url, save_folder):
         response = requests.head(url=file_url)
-        # print(response.headers)
-        print(response.headers['Content-Disposition'].encode('utf-8'))
-        print(type(response.headers['Content-Disposition']))
+        print(response.headers)
+        # print(response.headers['Content-Disposition'].encode('utf-8'))
+        # print(type(response.headers['Content-Disposition']))
         value, params = cgi.parse_header( response.headers['Content-Disposition'] )
-        print(value)
-        print(params['filename'])
+        # print(value)
+        print(params['filename'].encode('ISO-8859-1').decode('utf8'))
         pass
 
+    # 解析课程表，将一个学习的课程表对应的链接都获取到
+    def parse_table(self, table_start_url):
+        html = self.get_html(table_start_url)
+
+        # 遍历需要下载的视频和视频标题
+        soup = BeautifulSoup(html, 'html.parser')
+        work_table = soup.find_all('table', attrs={'class':'content_table', 'grade' : '3'})
+
+        for item in work_table:
+            chinese_td = item.find_all('td', attrs={'class':'content_table_td'})
+            for sub_item in chinese_td:
+                print(sub_item)
+
+            # print(item)
+
+        print(len(work_table))
+        pass
+
+
+# 保存路径规划
+# teaching_resource / YYYY-MM-DD-Name / xxxx.video,ppt,docx
 
 # 实例化
 course_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/w.html?grade=3"
@@ -145,8 +158,11 @@ video_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/weike/0
 # file_url = "https://cache.bdschool.cn/index.php?app=interface&mod=Resource&act=download&id=908001"
 file_url = "https://cache.bdschool.cn/index.php?app=interface&mod=Resource&act=download&id=872507"
 
-dog = kzkt()
-# dog.parse_video(dog.get_html(url))
+table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/w.html?grade=3"
 
+dog = kzkt()
+dog.parse_table(table_start_url)
+
+# dog.parse_video(dog.get_html(url))
 # dog.download_video(video_url, 'videos')
-dog.download_file(file_url, 'videos')
+# dog.download_file(file_url, 'videos')
