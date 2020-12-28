@@ -138,19 +138,36 @@ class kzkt():
         soup = BeautifulSoup(html, 'html.parser')
         work_table = soup.find_all('table', attrs={'class':'content_table', 'grade' : '3'})
 
-        i = 0
-        j = 0
         for item in work_table:
             # 表格为6行6列
 
+            i = 0
+            j = 0
+            table_data = [ ['' for m in range(6)] for n in range(6) ]
+            print(table_data)
+            
+            trs = item.find_all('tr')
+            for tr in trs:
+                cells = tr.find_all('th')
+                if not cells:
+                    cells = tr.find_all('td')
+                for cell in cells:
+                    table_data[i][j] = cell.get_text()
+                    print(j)
+                    print(table_data)
+                    j = j + 1
+                print(i)
+                i = i + 1
+                j = 0
 
-            chinese_td = item.find_all('td', attrs={'class':'content_table_td'})
+            print(table_data)
+            # chinese_td = item.find_all('td', attrs={'class':'content_table_td'})
 
-            for sub_item in chinese_td:
-                # print(sub_item)
-                print("Table:" + str(i) + ", Td: " + str(j))
-                j = j + 1
-            i = i + 1
+            # for sub_item in chinese_td:
+            #     # print(sub_item)
+            #     print("Table:" + str(i) + ", Td: " + str(j))
+            #     j = j + 1
+            # i = i + 1
             # print(item)
 
         print(len(work_table))
