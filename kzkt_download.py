@@ -139,11 +139,11 @@ class kzkt():
         work_table = soup.find_all('table', attrs={'class':'content_table', 'grade' : '3'})
 
         for item in work_table:
-            # 表格为6行6列
 
             i = 0
             j = 0
-            table_data = [ ['' for m in range(6)] for n in range(6) ]
+            # 表格为6行6列，国庆期间表格较为特殊，最大表格为7行7列
+            table_data = [ ['' for m in range(7)] for n in range(7) ]
             print(table_data)
             
             trs = item.find_all('tr')
@@ -154,7 +154,7 @@ class kzkt():
                 for cell in cells:
                     table_data[i][j] = cell.get_text()
                     print(j)
-                    print(table_data)
+                    # print(table_data)
                     j = j + 1
                 print(i)
                 i = i + 1
