@@ -144,7 +144,7 @@ class kzkt():
             j = 0
             # 表格为6行6列，国庆期间表格较为特殊，最大表格为7行7列
             table_data = [ ['' for m in range(7)] for n in range(7) ]
-            print(table_data)
+            # print(table_data)
             
             trs = item.find_all('tr')
             for tr in trs:
@@ -153,11 +153,9 @@ class kzkt():
                     cells = tr.find_all('td')
                 for cell in cells:
                     table_data[i][j] = cell.get_text()
+                    # 把含有语文的内容记录下来
                     if "语文" in cell.get_text():
-                        print(cell.get_text())
-                        print(cell.a)
-                        print(table_data[0][j])
-                    # 把含有语文的坐标记录下来
+                        print(table_data[0][j].strip().split("\n")[0] + "," + cell.get_text().strip().split("\n")[3] + "," + cell.a['href'])
                     
                     # print(j)
                     # print(table_data)
