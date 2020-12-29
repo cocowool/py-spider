@@ -31,17 +31,17 @@ class kzkt():
         return response.text
 
     # 将内容保存为文件
-    def save_file(self, contents, file_name):
+    def test_save_file(self, contents, file_name):
         with open(file_name, "wb") as file_obj:
             file_obj.write(contents)
         pass
 
     # 请求视频地址并保存为文件
-    def save_video(self, video_url, file_name):
+    def download_file(self, file_url, file_name):
         start_time = time.time()
         chunk_size = 4096
 
-        response = requests.head(url=video_url)
+        response = requests.head(url=file_url)
         headers = {}
 
         # 初始化当前下载完成的文件大小
@@ -53,8 +53,8 @@ class kzkt():
             print("get header error")
             print(e.args)
 
-        print( total_file_size )
-        print('Start download, [File size]:{size:.2f} MB'.format(size = total_file_size / 1024))
+        print( 'File Name : ' + file_name )
+        print('Start download, [File size]:{size:.2f} MB'.format(size = total_file_size / 1024 / 1024))
 
         if not os.path.exists(file_name):
             with open(file_name, 'ab+') as f:
@@ -66,7 +66,7 @@ class kzkt():
             try:
                 file_size = os.path.getsize(file_name)
                 headers['Range'] = 'bytes=%d-' % file_size
-                response = requests.get(url=video_url, headers=headers, stream=True, timeout=20)
+                response = requests.get(url=file_url, headers=headers, stream=True, timeout=20)
                 with open(file_name, 'ab+') as f:
                     # 请求没有被显示的关闭，可能会有性能问题
                     for chunk in response.iter_content(chunk_size = chunk_size):
@@ -74,7 +74,7 @@ class kzkt():
                             if chunk:
                                 f.write(chunk)
                                 size += len(chunk)
-                                print('\r' + '[Download progress]:%s%.2f%\n' % ('>' * int(size * 50 / total_file_size), float(size/total_file_size*100)) )
+                                print('\r' + '[ Download progress ]:%s%.2f%\n' % ('>' * int(size * 50 / total_file_size), float(size/total_file_size*100)) )
                         elif os.path.getsize(file_name) >= total_file_size:
                             download_flag = False
                             return file_name
@@ -83,15 +83,24 @@ class kzkt():
                             time.sleep(3)
                             break
             except Exception as e:
+                print(file_url)
                 print("download error:")
-                print(e.args)
+                print(e)
+                # print(Argument)
 
         end_time = time.time()
 
         print('Download completed!, times: %.2f seconds' % (end_time - start_time))
 
     # 下载页面中的视频及课件
-    def download_video(self, url, save_folder):
+    def download_files(self, url, save_folder):
+        save_folder_prefix = "./teaching_resource/"
+        save_folder = save_folder_prefix + save_folder
+
+        # 判断并创建文件夹
+        if not os.path.exists(save_folder):
+            os.makedirs(r"" + save_folder)
+
         response = requests.get(url)
         soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -102,32 +111,37 @@ class kzkt():
         # 获取视频资源的链接地址
         video_url = re.search(r'videourl="(.*)"', response.text).group(1).strip()
 
-        # 判断并创建文件夹
-        if os.path.exists(save_folder):
-            self.save_video( video_url, save_folder + "/" + lesson_name.text + ".mp4" )
-        else:
-            os.makedirs(r"" + save_folder)
-            self.save_video( video_url, save_folder + "/" + lesson_name.text + ".mp4" )
+        print("Video Url : " + video_url)
+        self.download_file( video_url, save_folder + "/" + lesson_name.text + ".mp4" )
 
         # print(response.text)
         # print(soup.find_all('script'))
-
 
         # print(soup.find_all('a', attrs={'class':'file_view_list'}))
         # file_name = '1123.ppt'
         # ppt_url = "https://cache.bdschool.cn/index.php?app=interface&mod=Resource&act=download&id=872462"
         # file_res = requests.get(ppt_url)
+
+        # 获取需要下载的文件列表
+        file_lists = soup.find_all('div', attrs = {'class':'recourse_item'})
+        for f in file_lists:
+            print("File name:" + f.get_text().strip())
+            print("File Url:" + f.a['href'])
+            self.save_file(f.a['href'], save_folder)
         pass
 
-    # 下载视频页面的文件
-    def download_file(self, file_url, save_folder):
+    # 下载保存视频页面的文件
+    def save_file(self, file_url, save_folder):
+        # file_url_prefix = 'https://cache.bdschool.cn'
+        file_url_prefix = ''
+        file_url = file_url_prefix + file_url
+
         response = requests.head(url=file_url)
-        print(response.headers)
-        # print(response.headers['Content-Disposition'].encode('utf-8'))
-        # print(type(response.headers['Content-Disposition']))
         value, params = cgi.parse_header( response.headers['Content-Disposition'] )
-        # print(value)
-        print(params['filename'].encode('ISO-8859-1').decode('utf8'))
+        # 按照规范转换文件名
+        file_name = params['filename'].encode('ISO-8859-1').decode('utf8')
+
+        self.download_file(file_url, save_folder + '/' + file_name)
         pass
 
     # 解析课程表，将一个学习的课程表对应的链接都获取到
@@ -156,27 +170,37 @@ class kzkt():
                     # 把含有语文的内容记录下来
                     if "语文" in cell.get_text():
                         print(table_data[0][j].strip().split("\n")[0] + "," + cell.get_text().strip().split("\n")[3] + "," + cell.a['href'])
-                    
-                    # print(j)
-                    # print(table_data)
+
+                        # 获取课程页面内容
+                        # course_html = self.get_html(cell.a['href'])
+                        self.download_files(cell.a['href'], table_data[0][j].strip().split("\n")[0] + "-" + cell.get_text().strip().split("\n")[3])
                     j = j + 1
-                # print(i)
                 i = i + 1
                 j = 0
 
-            # print(table_data)
-            # chinese_td = item.find_all('td', attrs={'class':'content_table_td'})
-
-            # for sub_item in chinese_td:
-            #     # print(sub_item)
-            #     print("Table:" + str(i) + ", Td: " + str(j))
-            #     j = j + 1
-            # i = i + 1
-            # print(item)
-
-        print(len(work_table))
+        print( "完成所有课程资源的下载！" )
         pass
 
+    def test(self):
+        course_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/weike/dcb83ca48c8d819e2cbf2279df0a9009.html?grade_id=3&subject_id=1"
+        response = requests.get(course_url)
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        # 获取课程名称
+        lesson_name = soup.find('span', attrs = {'id':'album_lesson_name'})
+        print(lesson_name.text)
+
+        # 获取视频资源的链接地址
+        video_url = re.search(r'videourl="(.*)"', response.text).group(1).strip()
+        print("Video Url : " + video_url)
+
+        # 获取需要下载的文件列表
+        file_lists = soup.find_all('div', attrs = {'class':'recourse_item'})
+        for f in file_lists:
+            print("File name:" + f.get_text().strip())
+            print("Download Url:" + f.a['href'])
+
+        pass
 
 # 保存路径规划
 # teaching_resource / YYYY-MM-DD-Name / xxxx.video,ppt,docx
@@ -192,6 +216,8 @@ table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/w
 dog = kzkt()
 dog.parse_table(table_start_url)
 
+# dog.save_file(file_url,'./teaching_resource')
+# dog.test()
 # dog.parse_video(dog.get_html(url))
 # dog.download_video(video_url, 'videos')
 # dog.download_file(file_url, 'videos')
