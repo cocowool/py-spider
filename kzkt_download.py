@@ -153,14 +153,20 @@ class kzkt():
                     cells = tr.find_all('td')
                 for cell in cells:
                     table_data[i][j] = cell.get_text()
-                    print(j)
+                    if "语文" in cell.get_text():
+                        print(cell.get_text())
+                        print(cell.a)
+                        print(table_data[0][j])
+                    # 把含有语文的坐标记录下来
+                    
+                    # print(j)
                     # print(table_data)
                     j = j + 1
-                print(i)
+                # print(i)
                 i = i + 1
                 j = 0
 
-            print(table_data)
+            # print(table_data)
             # chinese_td = item.find_all('td', attrs={'class':'content_table_td'})
 
             # for sub_item in chinese_td:
