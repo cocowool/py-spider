@@ -206,18 +206,18 @@ class kzkt():
 # teaching_resource / YYYY-MM-DD-Name / xxxx.video,ppt,docx
 
 # 实例化
-course_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/w.html?grade=3"
-video_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/weike/0bf79a3ba787b32a7ed2df8844e7dd8e.html?grade_id=3&subject_id=1"
+course_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/weike/ca7cbfb74525d1f3356de6fcb1731563.html?grade_id=3&subject_id=1&_d=2020/12/28"
+video_url = "https://video.cache.bdschool.cn/vd/be520d8037ee8ed5a01b0ac502d3caa2.mp4?s=f164c7f3afa596cb3339e018c746fb87&c=301785&id=63701"
 # file_url = "https://cache.bdschool.cn/index.php?app=interface&mod=Resource&act=download&id=908001"
 file_url = "https://cache.bdschool.cn/index.php?app=interface&mod=Resource&act=download&id=872507"
 
 table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/w.html?grade=3"
 
 dog = kzkt()
-dog.parse_table(table_start_url)
+# dog.parse_table(table_start_url)
 
 # dog.save_file(file_url,'./teaching_resource')
 # dog.test()
 # dog.parse_video(dog.get_html(url))
-# dog.download_video(video_url, 'videos')
-# dog.download_file(file_url, 'videos')
+# dog.download_file(video_url, 'videos')
+dog.download_files(course_url, 'test')
