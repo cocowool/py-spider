@@ -65,7 +65,8 @@ class kzkt():
         while download_flag:
             try:
                 file_size = os.path.getsize(file_name)
-                headers['Range'] = 'bytes=%d-' % file_size
+                headers['Range'] = "bytes=%s-%s" % (file_size, total_file_size)
+                headers['user-agent'] = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36'
                 response = requests.get(url=file_url, headers=headers, stream=True, timeout=20)
                 with open(file_name, 'ab+') as f:
                     # 请求没有被显示的关闭，可能会有性能问题
@@ -74,7 +75,7 @@ class kzkt():
                             if chunk:
                                 f.write(chunk)
                                 size += len(chunk)
-                                print('\r' + '[ Download progress ]:%s%.2f%\n' % ('>' * int(size * 50 / total_file_size), float(size/total_file_size*100)) )
+                                # print('\r' + '[ Download progress ]:%s%.2f%\n' % ('>' * int(size * 50 / total_file_size), float(size/total_file_size*100)) )
                         elif os.path.getsize(file_name) >= total_file_size:
                             download_flag = False
                             return file_name
@@ -127,7 +128,7 @@ class kzkt():
         for f in file_lists:
             print("File name:" + f.get_text().strip())
             print("File Url:" + f.a['href'])
-            self.save_file(f.a['href'], save_folder)
+            self.save_file( "https://video.cache.bdschool.cn" + f.a['href'], save_folder)
         pass
 
     # 下载保存视频页面的文件
