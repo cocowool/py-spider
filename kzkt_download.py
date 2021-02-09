@@ -215,10 +215,10 @@ file_url = "https://cache.bdschool.cn/index.php?app=interface&mod=Resource&act=d
 table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/w.html?grade=3"
 
 dog = kzkt()
-# dog.parse_table(table_start_url)
+dog.parse_table(table_start_url)
 
 # dog.save_file(file_url,'./teaching_resource')
 # dog.test()
 # dog.parse_video(dog.get_html(url))
 # dog.download_file(video_url, 'videos')
-dog.download_files(course_url, 'test')
+# dog.download_files(course_url, 'test')
