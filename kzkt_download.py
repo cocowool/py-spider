@@ -212,7 +212,11 @@ video_url = "https://video.cache.bdschool.cn/vd/be520d8037ee8ed5a01b0ac502d3caa2
 # file_url = "https://cache.bdschool.cn/index.php?app=interface&mod=Resource&act=download&id=908001"
 file_url = "https://cache.bdschool.cn/index.php?app=interface&mod=Resource&act=download&id=872507"
 
-table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/w.html?grade=3"
+# 三年级上册
+# table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/w.html?grade=3"
+
+# 三年级下册
+table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/prev_w.html?grade=3&_d=2021/02/23"
 
 dog = kzkt()
 dog.parse_table(table_start_url)
