@@ -168,13 +168,17 @@ class kzkt():
                     cells = tr.find_all('td')
                 for cell in cells:
                     table_data[i][j] = cell.get_text()
+                    # 对于三年级下学期，如果有“一课一包”，则下载所有文件并跳过后续
+                    if "一课一包" in cell.get_text():
+                        # print(cell)
+                        print(cell.a['href'])
                     # 把含有语文的内容记录下来
-                    if "语文" in cell.get_text():
-                        print(table_data[0][j].strip().split("\n")[0] + "," + cell.get_text().strip().split("\n")[3] + "," + cell.a['href'])
-
+                    elif "语文" in cell.get_text():
+                        # print(table_data[0][j].strip().split("\n")[0] + "," + cell.get_text().strip().split("\n")[3] + "," + cell.a['href'])
+                        pass
                         # 获取课程页面内容
                         # course_html = self.get_html(cell.a['href'])
-                        self.download_files(cell.a['href'], table_data[0][j].strip().split("\n")[0] + "-" + cell.get_text().strip().split("\n")[3])
+                        # self.download_files(cell.a['href'], table_data[0][j].strip().split("\n")[0] + "-" + cell.get_text().strip().split("\n")[3])
                     j = j + 1
                 i = i + 1
                 j = 0
