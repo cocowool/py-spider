@@ -220,7 +220,10 @@ file_url = "https://cache.bdschool.cn/index.php?app=interface&mod=Resource&act=d
 # table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/w.html?grade=3"
 
 # 三年级下册
-table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/prev_w.html?grade=3&_d=2021/02/23"
+# table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/prev_w.html?grade=3&_d=2021/02/23"
+
+# 四年级下册
+table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/2020_d_w.html?grade=4&_d=2022/01/15"
 
 dog = kzkt()
 dog.parse_table(table_start_url)
