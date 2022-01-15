@@ -44,6 +44,7 @@ class kzkt():
         chunk_size = 4096
 
         response = requests.head(url=file_url)
+        response.encoding = 'utf-8'
         headers = {}
 
         # 初始化当前下载完成的文件大小
@@ -105,6 +106,7 @@ class kzkt():
             os.makedirs(r"" + save_folder)
 
         response = requests.get(url)
+        response.encoding = 'utf-8'
         soup = BeautifulSoup(response.text, 'html.parser')
 
         # 获取课程名称
