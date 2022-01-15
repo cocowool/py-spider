@@ -12,6 +12,7 @@ from bs4 import BeautifulSoup
 import requests
 import time
 import cgi
+import urllib.parse
 
 class kzkt():
     # 通过requests方式获取网页内容
@@ -146,12 +147,25 @@ class kzkt():
         pass
 
     # 解析课程表，将一个学习的课程表对应的链接都获取到
-    def parse_table(self, table_start_url):
+    # only_list 表示只列出链接，不进行下载，默认为 0，设置为 1 时表示列出链接并进行下载
+    def parse_table(self, table_start_url, only_list = 0):
+        # 解析 url 中带的参数
+        result = urllib.parse.urlsplit(table_start_url)
+        url_paras = dict(urllib.parse.parse_qsl(urllib.parse.urlsplit(table_start_url).query))
+
+        if( not "grade" in url_paras ):
+            print( " grade 属性不存在，请明确需要获取的年级。")
+            return False
+
+        print(url_paras)
+
         html = self.get_html(table_start_url)
 
         # 遍历需要下载的视频和视频标题
         soup = BeautifulSoup(html, 'html.parser')
-        work_table = soup.find_all('table', attrs={'class':'content_table', 'grade' : '3'})
+        work_table = soup.find_all('table', attrs={'class':'content_table', 'grade' : url_paras['grade']})
+
+        print(work_table)
 
         for item in work_table:
 
@@ -174,7 +188,7 @@ class kzkt():
                         print(cell.a['href'])
                     # 把含有语文的内容记录下来
                     elif "语文" in cell.get_text():
-                        # print(table_data[0][j].strip().split("\n")[0] + "," + cell.get_text().strip().split("\n")[3] + "," + cell.a['href'])
+                        print(table_data[0][j].strip().split("\n")[0] + "," + cell.get_text().strip().split("\n")[3] + "," + cell.a['href'])
                         pass
                         # 获取课程页面内容
                         # course_html = self.get_html(cell.a['href'])
@@ -223,7 +237,8 @@ file_url = "https://cache.bdschool.cn/index.php?app=interface&mod=Resource&act=d
 # table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/prev_w.html?grade=3&_d=2021/02/23"
 
 # 四年级下册
-table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/2020_d_w.html?grade=4&_d=2022/01/15"
+table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/2020_d_w.html"
+# table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/2020_d_w.html?grade=4&_d=2022/01/15"
 
 dog = kzkt()
 dog.parse_table(table_start_url)
