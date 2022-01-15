@@ -28,6 +28,7 @@ class kzkt():
         #     my_cookie = config['cookie']
 
         response = requests.get(url, headers = my_headers, cookies = my_cookie)
+        response.encoding = 'utf-8'
 
         return response.text
 
@@ -157,15 +158,11 @@ class kzkt():
             print( " grade 属性不存在，请明确需要获取的年级。")
             return False
 
-        print(url_paras)
-
         html = self.get_html(table_start_url)
 
         # 遍历需要下载的视频和视频标题
         soup = BeautifulSoup(html, 'html.parser')
         work_table = soup.find_all('table', attrs={'class':'content_table', 'grade' : url_paras['grade']})
-
-        print(work_table)
 
         for item in work_table:
 
@@ -182,6 +179,7 @@ class kzkt():
                     cells = tr.find_all('td')
                 for cell in cells:
                     table_data[i][j] = cell.get_text()
+                    print(cell.get_text())
                     # 对于三年级下学期，如果有“一课一包”，则下载所有文件并跳过后续
                     if "一课一包" in cell.get_text():
                         # print(cell)
@@ -237,8 +235,8 @@ file_url = "https://cache.bdschool.cn/index.php?app=interface&mod=Resource&act=d
 # table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/prev_w.html?grade=3&_d=2021/02/23"
 
 # 四年级下册
-table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/2020_d_w.html"
-# table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/2020_d_w.html?grade=4&_d=2022/01/15"
+# table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/2020_d_w.html"
+table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/2020_d_w.html?grade=4&_d=2022/01/15"
 
 dog = kzkt()
 dog.parse_table(table_start_url)
