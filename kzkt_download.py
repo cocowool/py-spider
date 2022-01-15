@@ -145,6 +145,8 @@ class kzkt():
         value, params = cgi.parse_header( response.headers['Content-Disposition'] )
         # 按照规范转换文件名
         file_name = params['filename'].encode('ISO-8859-1').decode('utf8')
+        # 对中文文件名进行 url解码 
+        file_name = urllib.parse.unquote(file_name)
 
         self.download_file(file_url, save_folder + '/' + file_name)
         pass
@@ -237,22 +239,39 @@ file_url = "https://cache.bdschool.cn/index.php?app=interface&mod=Resource&act=d
 
 # 三年级上册
 # table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/w.html?grade=3"
+# table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/2020_u_w.html?grade=3&_d=2022/01/15"
 
 # 三年级下册
 # table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/prev_w.html?grade=3&_d=2021/02/23"
 
-# 四年级下册
+# 四年级上册
 # table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/2020_d_w.html"
 table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/2020_d_w.html?grade=4&_d=2022/01/15"
+
+# 四年级下册
+# table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/2020_u_w.html?grade=4&_d=2022/01/15"
+
+# 五年级上册
+# table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/2020_d_w.html?grade=5&_d=2022/01/15"
+
+# 五年级下册
+# table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/2020_u_w.html?grade=5&_d=2022/01/15"
+
+# 六年级上册
+# table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/2020_d_w.html?grade=6&_d=2022/01/15"
+
+# 六年级下册
+# table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/2020_u_w.html?grade=6&_d=2022/01/15"
+
 
 dog = kzkt()
 course_list = dog.parse_table(table_start_url)
 
 # 下载课程内容
-if course_list:
-    print("下面开始下载课程具体内容")
-    for i in course_list:
-        dog.download_files(i['course_href'], i['course_date'] + '-' + i['course_title'])
+# if course_list:
+#     print("下面开始下载课程具体内容")
+#     for i in course_list:
+#         dog.download_files(i['course_href'], i['course_date'] + '-' + i['course_title'])
 
 # dog.save_file(file_url,'./teaching_resource')
 # dog.test()
