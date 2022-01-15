@@ -150,6 +150,9 @@ class kzkt():
     # 解析课程表，将一个学习的课程表对应的链接都获取到
     # only_list 表示只列出链接，不进行下载，默认为 0，设置为 1 时表示列出链接并进行下载
     def parse_table(self, table_start_url, only_list = 0):
+        # 存储课程的数据结构
+        course_list = []
+
         # 解析 url 中带的参数
         result = urllib.parse.urlsplit(table_start_url)
         url_paras = dict(urllib.parse.parse_qsl(urllib.parse.urlsplit(table_start_url).query))
@@ -179,14 +182,15 @@ class kzkt():
                     cells = tr.find_all('td')
                 for cell in cells:
                     table_data[i][j] = cell.get_text()
-                    print(cell.get_text())
+                    # print(cell.get_text())
                     # 对于三年级下学期，如果有“一课一包”，则下载所有文件并跳过后续
                     if "一课一包" in cell.get_text():
                         # print(cell)
                         print(cell.a['href'])
                     # 把含有语文的内容记录下来
                     elif "语文" in cell.get_text():
-                        print(table_data[0][j].strip().split("\n")[0] + "," + cell.get_text().strip().split("\n")[3] + "," + cell.a['href'])
+                        # print(table_data[0][j].strip().split("\n")[0] + "," + cell.get_text().strip().split("\n")[3] + "," + cell.a['href'])
+                        course_list.append( {'course_date':table_data[0][j].strip().split("\n")[0], 'course_title':cell.get_text().strip().split("\n")[3], 'course_href':cell.a['href']} ) 
                         pass
                         # 获取课程页面内容
                         # course_html = self.get_html(cell.a['href'])
@@ -195,8 +199,9 @@ class kzkt():
                 i = i + 1
                 j = 0
 
-        print( "完成所有课程资源的下载！" )
-        pass
+        print( "完成所有课程资源的分析，共发现 " + str(len(course_list)) + " 个课程资源，具体如下：" )
+        print(course_list)
+        return course_list
 
     def test(self):
         course_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/weike/dcb83ca48c8d819e2cbf2279df0a9009.html?grade_id=3&subject_id=1"
