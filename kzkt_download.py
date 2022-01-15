@@ -244,7 +244,13 @@ file_url = "https://cache.bdschool.cn/index.php?app=interface&mod=Resource&act=d
 table_start_url = "https://cache.bdschool.cn/public/bdschool/index/static/migu/2020_d_w.html?grade=4&_d=2022/01/15"
 
 dog = kzkt()
-dog.parse_table(table_start_url)
+course_list = dog.parse_table(table_start_url)
+
+# 下载课程内容
+if course_list:
+    print("下面开始下载课程具体内容")
+    for i in course_list:
+        dog.download_files(i['course_href'], i['course_date'] + '-' + i['course_title'])
 
 # dog.save_file(file_url,'./teaching_resource')
 # dog.test()
