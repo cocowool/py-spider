@@ -41,6 +41,7 @@ class SCSpider():
         # 找出所有的页面导航链接
         soup = BeautifulSoup(html, 'html.parser')
         page_link = soup.find_all('div', attrs={ 'id':'list_nav_all' })
+        page_link = page_link[0].find_all('a')
 
         print(page_link)
         # pass
