@@ -31,11 +31,19 @@ class SCSpider():
 
         return response.text
 
-    def find_pages(self):
+    def get_pages_list(self):
+        # 诗词排名链接列表
+        page_list = []
+
         start_page = 'https://www.shicimingju.com/paiming?p=1'
         html = self.get_html(start_page)
-        print(html)
+
+        # 找出所有的页面导航链接
+        soup = BeautifulSoup(html, 'html.parser')
+        page_link = soup.find_all('div', attrs={ 'id':'list_nav_all' })
+
+        print(page_link)
         # pass
 
 sc = SCSpider()
-sc.find_pages()
+sc.get_pages_list()
