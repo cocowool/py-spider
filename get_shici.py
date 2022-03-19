@@ -36,6 +36,7 @@ class SCSpider():
         page_list = []
 
         start_page = 'https://www.shicimingju.com/paiming?p=1'
+        page_prefix = 'https://www.shicimingju.com'
         html = self.get_html(start_page)
 
         # 找出所有的页面导航链接
@@ -45,10 +46,12 @@ class SCSpider():
 
         m = 0
         for i in page_link:
-            
-            print(i)
+            page_list.append( page_prefix + i.get('href') )
+            # print( i.get('href') )
+            # print(i)
 
-        # print(page_link)
+        return page_list
+        # print(page_list)
         # pass
 
 sc = SCSpider()
