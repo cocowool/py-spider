@@ -43,7 +43,12 @@ class SCSpider():
         page_link = soup.find_all('div', attrs={ 'id':'list_nav_all' })
         page_link = page_link[0].find_all('a')
 
-        print(page_link)
+        m = 0
+        for i in page_link:
+            
+            print(i)
+
+        # print(page_link)
         # pass
 
 sc = SCSpider()
