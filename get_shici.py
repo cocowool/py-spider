@@ -54,5 +54,17 @@ class SCSpider():
         # print(page_list)
         # pass
 
+    # 解析列表页，获取具体诗词列表
+    def get_poem_list(self, page_list):
+        pass
+
+    # 根据诗词列表页，解析每个诗词内容
+    def get_poem_detail(self):
+        pass
+
+    # 将诗词内容保存为 Markdown 文件
+    def save_poem_2_md(self):
+        pass
+
 sc = SCSpider()
 sc.get_pages_list()
