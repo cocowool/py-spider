@@ -56,7 +56,10 @@ class SCSpider():
 
     # 解析列表页，获取具体诗词列表
     def get_poem_list(self, page_list):
-        pass
+        for i in page_list:
+            html = self.get_html(i)
+            print(html)
+        # pass
 
     # 根据诗词列表页，解析每个诗词内容
     def get_poem_detail(self):
@@ -67,4 +70,5 @@ class SCSpider():
         pass
 
 sc = SCSpider()
-sc.get_pages_list()
+page_list = sc.get_pages_list()
+sc.get_poem_list(page_list)
