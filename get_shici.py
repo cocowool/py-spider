@@ -56,10 +56,16 @@ class SCSpider():
 
     # 解析列表页，获取具体诗词列表
     def get_poem_list(self, page_list):
+        shici_list = []
+
         for i in page_list:
             html = self.get_html(i)
-            print(html)
-        # pass
+            shici  = BeautifulSoup(html, 'html.parser')
+            shici_link = shici.find_all('div', attrs={'class':'shici_list_main'})
+            shici_list.append(shici_link)
+            # print(shici_link)
+            # print(html)
+        return shici_list
 
     # 根据诗词列表页，解析每个诗词内容
     def get_poem_detail(self):
@@ -71,4 +77,6 @@ class SCSpider():
 
 sc = SCSpider()
 page_list = sc.get_pages_list()
-sc.get_poem_list(page_list)
+shici_list = sc.get_poem_list(page_list)
+
+print(shici_list)
