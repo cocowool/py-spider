@@ -65,7 +65,10 @@ class SCSpider():
             shici_link = shici.find_all('div', attrs={'class':'shici_list_main'})
             for j in shici_link:
                 # j = j.find_all('h3')
-                href_list.append( j.get('href') )
+                print(j)
+                # j = BeautifulSoup(j, 'html.parser')
+                # j = j.find('h3').find('a').get('href')
+                href_list.append( j.find('h3').find('a').get('href') )
 
             shici_list.append(shici_link)
             # print(shici_link)
@@ -76,7 +79,7 @@ class SCSpider():
             # print(i)
             # href_list.append( i.find_all('h3').get('href') )
 
-        # print(href_list)
+        print(href_list)
         # return href_list
         return shici_list
 
