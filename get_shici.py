@@ -85,6 +85,8 @@ class SCSpider():
         return href_list
 
     # 根据诗词列表页，解析每个诗词内容
+    # 构建一个诗词的消息体，方便保存为文件时使用
+    # poem.title / poem.author / poem.dynasty / poem.fulltext / poem.description
     def get_poem_detail(self, poem_link):
         html = self.get_html(poem_link)
         print(html)
