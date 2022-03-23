@@ -85,7 +85,9 @@ class SCSpider():
         return href_list
 
     # 根据诗词列表页，解析每个诗词内容
-    def get_poem_detail(self):
+    def get_poem_detail(self, poem_link):
+        html = self.get_html(poem_link)
+        print(html)
         pass
 
     # 将诗词内容保存为 Markdown 文件
@@ -93,8 +95,12 @@ class SCSpider():
         pass
 
 sc = SCSpider()
-page_list = sc.get_pages_list()
-shici_list = sc.get_poem_list(page_list)
-poem_detail = sc.get_poem_detail(shici_list)
+# page_list = sc.get_pages_list()
+# shici_list = sc.get_poem_list(page_list)
+
+test_poem_link = 'https://www.shicimingju.com/chaxun/list/38123.html'
+sc.get_poem_detail(test_poem_link)
+
+# poem_detail = sc.get_poem_detail(shici_list)
 
 # print(shici_list)
