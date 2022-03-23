@@ -58,6 +58,7 @@ class SCSpider():
     def get_poem_list(self, page_list):
         shici_list = []
         href_list = []
+        page_prefix = 'https://www.shicimingju.com'
 
         for i in page_list:
             html = self.get_html(i)
@@ -68,7 +69,7 @@ class SCSpider():
                 # print(j)
                 # j = BeautifulSoup(j, 'html.parser')
                 # j = j.find('h3').find('a').get('href')
-                href_list.append( j.find('h3').find('a').get('href') )
+                href_list.append( page_prefix + j.find('h3').find('a').get('href') )
 
             shici_list.append(shici_link)
             # print(shici_link)
@@ -94,5 +95,6 @@ class SCSpider():
 sc = SCSpider()
 page_list = sc.get_pages_list()
 shici_list = sc.get_poem_list(page_list)
+poem_detail = sc.get_poem_detail(shici_list)
 
 # print(shici_list)
