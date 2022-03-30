@@ -89,6 +89,9 @@ class SCSpider():
     # poem.title / poem.author / poem.dynasty / poem.fulltext / poem.description
     def get_poem_detail(self, poem_link):
         html = self.get_html(poem_link)
+
+        # 诗歌标题
+        # p_title = html.""
         print(html)
         pass
 
