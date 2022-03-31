@@ -89,10 +89,12 @@ class SCSpider():
     # poem.title / poem.author / poem.dynasty / poem.fulltext / poem.description
     def get_poem_detail(self, poem_link):
         html = self.get_html(poem_link)
+        shici  = BeautifulSoup(html, 'html.parser')
 
         # 诗歌标题
-        # p_title = html.""
-        print(html)
+        p_title = shici.h1.get_text()
+        print(p_title)
+        # print(html)
         pass
 
     # 将诗词内容保存为 Markdown 文件
