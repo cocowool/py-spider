@@ -93,6 +93,10 @@ class SCSpider():
 
         # 诗歌标题
         p_title = shici.h1.get_text()
+        
+        # 年代作者
+        # print(shici.div)
+
         print(p_title)
         # print(html)
         pass
