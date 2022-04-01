@@ -95,9 +95,20 @@ class SCSpider():
         p_title = shici.h1.get_text()
         
         # 年代作者
-        # print(shici.div)
+        temp = shici.find_all('div', attrs={'class':'niandai_zuozhe'})
+        p_author = temp[0].a.get_text()
+        p_dynasty = re.search(r'\[(.*)\]', temp[0].get_text()).group(1).strip()
+
+        # p_dynasty = re.search(r'[(.*)]', temp[0].get_text()).group(1).strip()
 
         print(p_title)
+        print(p_author)
+        print(p_dynasty)
+        # re.search(r'videourl="(.*)"', response.text).group(1).strip()
+        print(temp[0].get_text())
+        # print(temp[0].get_text())
+        # print(shici.div)
+
         # print(html)
         pass
 
