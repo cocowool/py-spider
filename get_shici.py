@@ -99,13 +99,17 @@ class SCSpider():
         p_author = temp[0].a.get_text()
         p_dynasty = re.search(r'\[(.*)\]', temp[0].get_text()).group(1).strip()
 
-        # p_dynasty = re.search(r'[(.*)]', temp[0].get_text()).group(1).strip()
+        # 诗文具体内容，去掉脚注
+        p_content = shici.find_all('div', attrs={'id': 'zs_content'})[0].get_text().strip()
+        p_content = re.sub(r'\[\d+\]','', p_content)
 
+        print(p_content)
         print(p_title)
         print(p_author)
         print(p_dynasty)
+
         # re.search(r'videourl="(.*)"', response.text).group(1).strip()
-        print(temp[0].get_text())
+        # print(temp[0].get_text())
         # print(temp[0].get_text())
         # print(shici.div)
 
