@@ -13,6 +13,7 @@ from bs4 import BeautifulSoup
 import requests
 import time
 import cgi
+import json
 import pypinyin
 
 # https://www.shici123.cn/song/-------1
@@ -25,8 +26,11 @@ class Poem():
         self.p_dynasty = p_dynasty
         self.p_content = p_content
 
-    def save2json(self):
-        pass
+    def to_json(self):
+        result = {}
+        result['p_title'] = self.p_title
+
+        return json.dump(result)
 
 
 class SCSpider():
@@ -144,7 +148,6 @@ class SCSpider():
         file_name = '' + self.word2pinyin(poem.p_dynasty) + '-' + self.word2pinyin(poem.p_author) + '.json'
 
 
-
         print(file_name)
 
         pass
@@ -170,7 +173,7 @@ test_poem_link = 'https://www.shicimingju.com/chaxun/list/38123.html'
 p = sc.get_poem_detail(test_poem_link)
 sc.save_poem_2_json(p)
 
-print(p.p_author)
+print(p.to_json())
 print(sc.word2pinyin(p.p_author))
 
 # poem_detail = sc.get_poem_detail(shici_list)
