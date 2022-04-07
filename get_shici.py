@@ -4,6 +4,9 @@
 # 本脚本仅用于个人学习
 # 输入内容为 Markdown 文档
 
+# 开发参考内容
+# [Python 汉字转拼音](https://www.jb51.net/article/167461.htm)
+
 import os, sys, getopt
 import re
 from bs4 import BeautifulSoup
@@ -134,7 +137,16 @@ class SCSpider():
     # 文件名：朝代-作者.json
     # 文件内容：
     # []
-    def save_poem_2_json(self):
+    def save_poem_2_json(self, poem):
+        prefix_path = '/Users/shiqiang/Projects/shici123/json_files'
+        # 文件名为 朝代-作者
+
+        file_name = '' + self.word2pinyin(poem.p_dynasty) + '-' + self.word2pinyin(poem.p_author) + '.json'
+
+
+
+        print(file_name)
+
         pass
 
     # 将诗词内容保存为 Markdown 文件
@@ -156,7 +168,7 @@ sc = SCSpider()
 
 test_poem_link = 'https://www.shicimingju.com/chaxun/list/38123.html'
 p = sc.get_poem_detail(test_poem_link)
-
+sc.save_poem_2_json(p)
 
 print(p.p_author)
 print(sc.word2pinyin(p.p_author))
