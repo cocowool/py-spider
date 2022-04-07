@@ -14,6 +14,17 @@ import cgi
 # https://www.shici123.cn/song/-------1
 # https://www.shicimingju.com/paiming?p=2
 
+class Poem():
+    def __init__(self, p_title, p_author, p_dynasty, p_content):
+        self.p_title = p_title
+        self.p_author = p_author
+        self.p_dynasty = p_dynasty
+        self.p_content = p_content
+
+    def save2json(self):
+        pass
+
+
 class SCSpider():
     def get_html(self, url, method = "requests"):
         # config = self.read_config()
@@ -114,6 +125,14 @@ class SCSpider():
         # print(shici.div)
 
         # print(html)
+        pass
+
+    # 将诗词内容保存为 JSON 文件
+    # JSON Format
+    # 文件名：朝代-作者.json
+    # 文件内容：
+    # []
+    def save_poem_2_json(self):
         pass
 
     # 将诗词内容保存为 Markdown 文件
