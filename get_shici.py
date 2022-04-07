@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 import requests
 import time
 import cgi
+import pypinyin
 
 # https://www.shici123.cn/song/-------1
 # https://www.shicimingju.com/paiming?p=2
@@ -114,10 +115,11 @@ class SCSpider():
         p_content = shici.find_all('div', attrs={'id': 'zs_content'})[0].get_text().strip()
         p_content = re.sub(r'\[\d+\]','', p_content)
 
-        print(p_content)
-        print(p_title)
-        print(p_author)
-        print(p_dynasty)
+        return Poem(p_title, p_author, p_dynasty, p_content)
+        # print(p_content)
+        # print(p_title)
+        # print(p_author)
+        # print(p_dynasty)
 
         # re.search(r'videourl="(.*)"', response.text).group(1).strip()
         # print(temp[0].get_text())
@@ -125,7 +127,7 @@ class SCSpider():
         # print(shici.div)
 
         # print(html)
-        pass
+        # pass
 
     # 将诗词内容保存为 JSON 文件
     # JSON Format
@@ -139,12 +141,25 @@ class SCSpider():
     def save_poem_2_md(self):
         pass
 
+    # 将汉字转换为拼音
+    def word2pinyin(self, word):
+        s = ''
+        for i in pypinyin.pinyin( word, style=pypinyin.NORMAL):
+            s += ''.join(i)
+        
+        return s
+    
+
 sc = SCSpider()
 # page_list = sc.get_pages_list()
 # shici_list = sc.get_poem_list(page_list)
 
 test_poem_link = 'https://www.shicimingju.com/chaxun/list/38123.html'
-sc.get_poem_detail(test_poem_link)
+p = sc.get_poem_detail(test_poem_link)
+
+
+print(p.p_author)
+print(sc.word2pinyin(p.p_author))
 
 # poem_detail = sc.get_poem_detail(shici_list)
 
