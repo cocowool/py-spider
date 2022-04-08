@@ -142,11 +142,12 @@ class SCSpider():
     # 文件内容：
     # []
     def save_poem_2_json(self, poem):
-        prefix_path = '/Users/shiqiang/Projects/shici123/json_files'
+        prefix_path = '/Users/shiqiang/Projects/shici123/json_files/'
         # 文件名为 朝代-作者
-
         file_name = '' + self.word2pinyin(poem.p_dynasty) + '-' + self.word2pinyin(poem.p_author) + '.json'
+        file_path = prefix_path + file_name
 
+        # 检查文件是否存在
 
         print(file_name)
 
