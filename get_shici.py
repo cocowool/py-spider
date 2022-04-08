@@ -3,6 +3,7 @@
 # 收集中华古诗词
 # 本脚本仅用于个人学习
 # 输入内容为 Markdown 文档
+# @TODO 需要记录起点，上次执行的位置，可以从上次执行的位置继续
 
 # 开发参考内容
 # [Python 汉字转拼音](https://www.jb51.net/article/167461.htm)
@@ -48,7 +49,9 @@ class SCSpider():
         # if config['cookie']:
         #     my_cookie = config['cookie']
 
-        response = requests.get(url, headers = my_headers, cookies = my_cookie)
+        s = requests.session()
+        s.keep_alive = False
+        response = s.get(url, headers = my_headers, cookies = my_cookie)
         response.encoding = 'utf-8'
 
         return response.text
@@ -179,13 +182,12 @@ sc = SCSpider()
 page_list = sc.get_pages_list()
 shici_list = sc.get_poem_list(page_list)
 
-test_poem_link = 'https://www.shicimingju.com/chaxun/list/38123.html'
-p = sc.get_poem_detail(test_poem_link)
-sc.save_poem_2_json(p)
+for i in shici_list:
+    # test_poem_link = 'https://www.shicimingju.com/chaxun/list/38123.html'
+    p = sc.get_poem_detail(i)
+    sc.save_poem_2_json(p)
 
 # print(p.to_json())
 # print(sc.word2pinyin(p.p_author))
-
 # poem_detail = sc.get_poem_detail(shici_list)
-
 # print(shici_list)
