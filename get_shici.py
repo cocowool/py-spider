@@ -29,6 +29,9 @@ class Poem():
     def to_json(self):
         result = {}
         result['p_title'] = self.p_title
+        result['p_author'] = self.p_author
+        result['p_dynasty'] = self.p_dynasty
+        result['p_content'] = self.p_content
 
         return json.dump(result)
 
@@ -148,8 +151,11 @@ class SCSpider():
         file_path = prefix_path + file_name
 
         # 检查文件是否存在
-
-        print(file_name)
+        if os.path.isfile(file_path):
+            print('File Exists')
+        else:
+            print('File will be create')
+            print(file_name)
 
         pass
 
@@ -174,7 +180,7 @@ test_poem_link = 'https://www.shicimingju.com/chaxun/list/38123.html'
 p = sc.get_poem_detail(test_poem_link)
 sc.save_poem_2_json(p)
 
-print(p.to_json())
+# print(p.to_json())
 print(sc.word2pinyin(p.p_author))
 
 # poem_detail = sc.get_poem_detail(shici_list)
