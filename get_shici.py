@@ -183,11 +183,11 @@ sc = SCSpider()
 page_list = sc.get_pages_list()
 shici_list = sc.get_poem_list(page_list)
 
-# for i in shici_list:
-#     # test_poem_link = 'https://www.shicimingju.com/chaxun/list/38123.html'
-#     print(i)
-#     p = sc.get_poem_detail(i)
-#     sc.save_poem_2_json(p)
+for i in shici_list:
+    # test_poem_link = 'https://www.shicimingju.com/chaxun/list/38123.html'
+    p = sc.get_poem_detail(i)
+    sc.save_poem_2_json(p)
+    print(i + ' Saved!')
 
 # print(p.to_json())
 # print(sc.word2pinyin(p.p_author))
