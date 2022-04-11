@@ -28,6 +28,8 @@ def ps_daemon(pid_file = None):
             f.write(str(os.getpid()))
         atexit.register(os.remove, pid_file)
 
+    ps_spider()
+
 def ps_spider():
     while True:
         print("Happly Little spider")
