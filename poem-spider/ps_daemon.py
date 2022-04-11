@@ -10,12 +10,35 @@ import threading
 # 每 x 分钟从配置文件扫描需要抓取的网站
 # 每 x 分钟记录当前抓取的进展
 
-def ps_daemon():
-    print("Start ps daemon")
-    time.sleep(10)
-    print("End ps daemon")
+def ps_daemon(pid_file = None):
+    # 从父进程 Fork 子进程出来
+    pid = os.fork()
+    if pid:
+        sys.exit(0)
 
-print("Main Process Start")
-m = threading.Thread(target=ps_daemon, args=())
-m.start()
-time.sleep(1)
+    os.chdir('/')
+    os.umask(0)
+    os.setsid()
+
+    sys.stdout.flush()
+    sys.stderr.flush()
+
+    if pid_file:
+        with open(pid_file, 'w+') as f:
+            f.write(str(os.getpid()))
+        atexit.register(os.remove, pid_file)
+
+def ps_spider():
+    while True:
+        print("Happly Little spider")
+        time.sleep(5)
+
+#     print("Start ps daemon")
+#     time.sleep(10)
+#     print("End ps daemon")
+
+# print("Main Process Start")
+# m = threading.Thread(target=ps_daemon, args=())
+# m.start()
+# time.sleep(1)
+ps_daemon()
