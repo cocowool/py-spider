@@ -14,7 +14,13 @@ import signal
 class DeamonDecorator:
     pass
 
-class PoemSpiderDeamon(DeamonDecorator):
+class PoemSpiderDeamon:
+    # 初始化
+    def __init__(self, pid_path, stdin = os.devnull, stdout = os.devnull, stderr = os.devnull, home_dir = '.', umask = '022', verbose = 1):
+        self.stdin = stdin
+
+        super().__init__()
+
     pass
 
 def ps_daemon(pid_file = None):
@@ -42,31 +48,33 @@ def ps_spider():
         print("Happly Little spider")
         time.sleep(5)
 
-if __name__ == '__main__':
-    help_msg = 'Usage: python3 ps_daemon.py <start|stop|restart|status>'
-    if len(sys.argv) != 2:
-        print(help_msg)
-        sys.exit(1)
+ps_daemon()
 
-    psd_name = 'poem_spider_daemon'
-    pid_file = '/Users/shiqiang/Projects/py-spider/poem-spider/psd.pid'
-    log_file = '/Users/shiqiang/Projects/py-spider/poem-spider/psd.log'
-    err_file = '/Users/shiqiang/Projects/py-spider/poem-spider/psd-error.log'
+# if __name__ == '__main__':
+#     help_msg = 'Usage: python3 ps_daemon.py <start|stop|restart|status>'
+#     if len(sys.argv) != 2:
+#         print(help_msg)
+#         sys.exit(1)
 
-    psd = PoemSpiderDeamon(psd_name, pid_file, stderr=err_file, verbose=1)
+#     psd_name = 'poem_spider_daemon'
+#     pid_file = '/Users/shiqiang/Projects/py-spider/poem-spider/psd.pid'
+#     log_file = '/Users/shiqiang/Projects/py-spider/poem-spider/psd.log'
+#     err_file = '/Users/shiqiang/Projects/py-spider/poem-spider/psd-error.log'
 
-    if sys.argv[1] == 'start':
-        psd.start(log_file)
-    elif sys.argv[1] == 'stop':
-        psd.stop()
-    elif sys.argv[1] == 'restart':
-        psd.restart(log_file)
-    elif sys.argv[1] == 'status':
-        alive = psd.is_running()
-        if alive:
-            print("Poem Daemon [%s] is running ......" % (psd.get_pid()) )
-        else:
-            print("Poem Daemon stopped")
-    else:
-        print("Invalid parameter")
-        print(help_msg)
+#     psd = PoemSpiderDeamon(psd_name, pid_file, stderr=err_file, verbose=1)
+
+#     if sys.argv[1] == 'start':
+#         psd.start(log_file)
+#     elif sys.argv[1] == 'stop':
+#         psd.stop()
+#     elif sys.argv[1] == 'restart':
+#         psd.restart(log_file)
+#     elif sys.argv[1] == 'status':
+#         alive = psd.is_running()
+#         if alive:
+#             print("Poem Daemon [%s] is running ......" % (psd.get_pid()) )
+#         else:
+#             print("Poem Daemon stopped")
+#     else:
+#         print("Invalid parameter")
+#         print(help_msg)
