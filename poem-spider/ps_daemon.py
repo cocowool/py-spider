@@ -18,10 +18,41 @@ class PoemSpiderDeamon:
     # 初始化
     def __init__(self, pid_path, stdin = os.devnull, stdout = os.devnull, stderr = os.devnull, home_dir = '.', umask = '022', verbose = 1):
         self.stdin = stdin
+        self.stdout = stdout
+        self.stderr = stderr
+        self.pid_path = pid_path
+        self.home_dir = home_dir
+        self.umask = umask
+        self.verbose = verbose
+        self.daemon_alive = True
 
         super().__init__()
 
-    pass
+    def ps_daemon(self):
+        #@TODO 本处忽略了错误处理
+        pid = os.fork()
+        if pid:
+            sys.exit(0)
+
+        os.chdir(self.home_dir)
+        os.setsid()
+        os.umask(self.umask)
+
+        pid = os.fork()
+        if pid:
+            sys.exit(0)
+
+        sys.stdout.flush()
+        sys.stderr.flush()
+
+        si = open(self.stdin, 'r')
+        so = open(self.stdout, 'a+')
+        if self.stderr:
+            se = open(self.stderr, 'a+', 0)
+        else:
+            se = so
+
+        
 
 def ps_daemon(pid_file = None):
     # 从父进程 Fork 子进程出来
