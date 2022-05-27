@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from doctest import FAIL_FAST
 import os
 import sys
 import atexit
@@ -52,7 +53,12 @@ class PoemSpiderDeamon:
         else:
             se = so
 
-        
+        os.dup2(si.fileno(), sys.stdin.fileno())
+        os.dup2(so.fileno(), sys.stdout.fileno())
+        os.dup2(se.fileno(), sys.stderr.fileno())
+
+        def sig_handler(signum ,frame):
+            self.daemon_alive = False
 
 def ps_daemon(pid_file = None):
     # 从父进程 Fork 子进程出来
