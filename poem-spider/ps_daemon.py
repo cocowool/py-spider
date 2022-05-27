@@ -60,6 +60,32 @@ class PoemSpiderDeamon:
         def sig_handler(signum ,frame):
             self.daemon_alive = False
 
+        signal.signal(signal.SIGTERM, sig_handler)
+        signal.signal(signal.SIGINT, sig_handler)
+
+        if self.verbose >= 1:
+            print('Little Spider start work.')
+
+        atexit.register(self.del_pid)
+        pid = str(os.getpid())
+        open(self.pid_path, 'w+').write('%s\n' % pid)
+
+    def get_pid(self):
+        try:
+            fh = open(self.pid_path, 'r')
+            pid = int(fh.read().strip())
+            fh.close()
+        except IOError:
+            pid = None
+        except SystemExit:
+            pid = None
+        
+        return pid
+
+    def del_pid(self):
+        if os.path.exists(self.pid_path):
+            os.remove(self.pid_path)
+
 def ps_daemon(pid_file = None):
     # 从父进程 Fork 子进程出来
     pid = os.fork()
