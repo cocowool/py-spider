@@ -15,9 +15,10 @@ import signal
 class DeamonDecorator:
     pass
 
-class PoemSpiderDeamon:
+## 基础的守护类
+class SpiderDeamon:
     # 初始化
-    def __init__(self, pid_path, stdin = os.devnull, stdout = os.devnull, stderr = os.devnull, home_dir = '.', umask = '022', verbose = 1):
+    def __init__(self, pid_path, stdin = os.devnull, stdout = os.devnull, stderr = os.devnull, home_dir = '.', umask = 18, verbose = 1):
         self.stdin = stdin
         self.stdout = stdout
         self.stderr = stderr
@@ -124,6 +125,31 @@ class PoemSpiderDeamon:
             print("Something Error Here !")
             pass
 
+    def restart(self, *args, **kwargs):
+        self.stop()
+        self.start(*args, **kwargs)
+
+    def status(self):
+        pid = self.get_pid()
+        return pid and os.path.exists('/proc/%d' % pid)
+
+    def run(self, *args, **kwargs):
+        print("Base class run()")
+
+class PoemSpiderDaemon(SpiderDeamon):
+    def __init__(self, name, pid_path, stdin=os.devnull, stdout=os.devnull, stderr=os.devnull, home_dir='.', umask=18, verbose=1):
+        super().__init__(pid_path, stdin, stdout, stderr, home_dir, umask, verbose)
+        self.name = name
+
+    def run(self, output_fn, **kwargs):
+        fd = open(output_fn, 'w')
+        while True:
+            line = time.ctime() + '\n'
+            fd.write(line)
+            fd.flush()
+            time.sleep(1)
+        fd.close()
+
 def ps_daemon(pid_file = None):
     # 从父进程 Fork 子进程出来
     pid = os.fork()
@@ -149,33 +175,31 @@ def ps_spider():
         print("Happly Little spider")
         time.sleep(5)
 
-ps_daemon()
+if __name__ == '__main__':
+    help_msg = 'Usage: python3 ps_daemon.py <start|stop|restart|status>'
+    if len(sys.argv) != 2:
+        print(help_msg)
+        sys.exit(1)
 
-# if __name__ == '__main__':
-#     help_msg = 'Usage: python3 ps_daemon.py <start|stop|restart|status>'
-#     if len(sys.argv) != 2:
-#         print(help_msg)
-#         sys.exit(1)
+    psd_name = 'poem_spider_daemon'
+    pid_file = '/Users/shiqiang/Projects/py-spider/poem-spider/psd.pid'
+    log_file = '/Users/shiqiang/Projects/py-spider/poem-spider/psd.log'
+    err_file = '/Users/shiqiang/Projects/py-spider/poem-spider/psd-error.log'
 
-#     psd_name = 'poem_spider_daemon'
-#     pid_file = '/Users/shiqiang/Projects/py-spider/poem-spider/psd.pid'
-#     log_file = '/Users/shiqiang/Projects/py-spider/poem-spider/psd.log'
-#     err_file = '/Users/shiqiang/Projects/py-spider/poem-spider/psd-error.log'
+    psd = PoemSpiderDaemon(psd_name, pid_file, stderr=err_file, verbose=1)
 
-#     psd = PoemSpiderDeamon(psd_name, pid_file, stderr=err_file, verbose=1)
-
-#     if sys.argv[1] == 'start':
-#         psd.start(log_file)
-#     elif sys.argv[1] == 'stop':
-#         psd.stop()
-#     elif sys.argv[1] == 'restart':
-#         psd.restart(log_file)
-#     elif sys.argv[1] == 'status':
-#         alive = psd.is_running()
-#         if alive:
-#             print("Poem Daemon [%s] is running ......" % (psd.get_pid()) )
-#         else:
-#             print("Poem Daemon stopped")
-#     else:
-#         print("Invalid parameter")
-#         print(help_msg)
+    if sys.argv[1] == 'start':
+        psd.start(log_file)
+    elif sys.argv[1] == 'stop':
+        psd.stop()
+    elif sys.argv[1] == 'restart':
+        psd.restart(log_file)
+    elif sys.argv[1] == 'status':
+        alive = psd.is_running()
+        if alive:
+            print("Poem Daemon [%s] is running ......" % (psd.get_pid()) )
+        else:
+            print("Poem Daemon stopped")
+    else:
+        print("Invalid parameter")
+        print(help_msg)
