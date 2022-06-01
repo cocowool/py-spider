@@ -86,6 +86,44 @@ class PoemSpiderDeamon:
         if os.path.exists(self.pid_path):
             os.remove(self.pid_path)
 
+    def start(self, *args, **kwars):
+        if self.verbose >= 1:
+            print('Little spider going to work ...')
+
+        pid = self.get_pid()
+        if pid:
+            msg = 'pid file %s already exists, is the little spider already working ?\n'
+            sys.stderr.write( msg % self.pid_path)
+            sys.exit(1)
+
+        self.ps_daemon()
+        self.run(*args, **kwars)
+
+    def stop(self):
+        if self.verbose >= 1:
+            print("Little spider going to stop")
+        pid = self.get_pid()
+        if not pid:
+            msg = "Pid file [%s] does not exist. Is it running?\n" % self.pid_path
+            sys.stderr.write(msg)
+            if os.path.exists(self.pid_path):
+                os.remove(self.pid_path)
+
+            return
+
+        # Try to kill the spider
+        try:
+            i = 0
+            while 1:
+                os.kill(pid, signal.SIGTERM)
+                time.sleep(0.1)
+                i = i + 1
+                if i % 10 == 0:
+                    os.kill(pid, signal.SIGHUP)
+        except OSError:
+            print("Something Error Here !")
+            pass
+
 def ps_daemon(pid_file = None):
     # 从父进程 Fork 子进程出来
     pid = os.fork()
