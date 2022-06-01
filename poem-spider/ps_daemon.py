@@ -121,7 +121,9 @@ class SpiderDeamon:
                 i = i + 1
                 if i % 10 == 0:
                     os.kill(pid, signal.SIGHUP)
+                    os.remove(self.pid_path)
         except OSError:
+            print(OSError)
             print("Something Error Here !")
             pass
 
