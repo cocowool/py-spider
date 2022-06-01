@@ -50,7 +50,7 @@ class SpiderDeamon:
         si = open(self.stdin, 'r')
         so = open(self.stdout, 'a+')
         if self.stderr:
-            se = open(self.stderr, 'a+', 0)
+            se = open(self.stderr, 'wb', 0)
         else:
             se = so
 
