@@ -131,7 +131,9 @@ class SpiderDeamon:
 
     def status(self):
         pid = self.get_pid()
-        return pid and os.path.exists('/proc/%d' % pid)
+        # cause macOs doesn't have /proc/ path, comment 
+        # return pid and os.path.exists('/proc/%d' % pid)
+        return pid
 
     def run(self, *args, **kwargs):
         print("Base class run()")
@@ -195,7 +197,7 @@ if __name__ == '__main__':
     elif sys.argv[1] == 'restart':
         psd.restart(log_file)
     elif sys.argv[1] == 'status':
-        alive = psd.is_running()
+        alive = psd.status()
         if alive:
             print("Poem Daemon [%s] is running ......" % (psd.get_pid()) )
         else:
