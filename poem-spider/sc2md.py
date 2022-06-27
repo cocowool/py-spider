@@ -6,7 +6,7 @@ import time
 # Convert spider json files to markdown file
 
 def get_human_time():
-    fmt = '%Y-%m-%d %H-%M-%S'
+    fmt = '%Y-%m-%d %H:%M:%S'
 
     ts = time.time()
     ta = time.localtime(ts)
