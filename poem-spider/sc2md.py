@@ -40,8 +40,13 @@ tag:
     md_string += '\n'
     md_string += json_content['p_content']
 
-    print(json_content)
-    print(md_string)
+    if markdown_file is not '':
+        # print(md_string)
+        with open( markdown_file, 'w') as fp:
+            fp.write(md_string)
+        fp.close()
+        print( "Saved to : " + markdown_file)
+
 
 
 if __name__ == "__main__":
@@ -52,7 +57,7 @@ if __name__ == "__main__":
             full_json_file = os.path.join(parent, file_name)
             markdown_file = markdown_files + file_name
             with open(full_json_file, 'r') as fp:                
-                print(full_json_file)                
+                # print(full_json_file)                
                 json_content = json.load(fp)
                 md_file_name = json_content['p_dynasty'] + '-' + json_content['p_author'] + '-' + json_content['p_title'] + '.md'
                 md_file_name = word2pinyin(md_file_name)
