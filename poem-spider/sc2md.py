@@ -2,6 +2,7 @@
 import os
 import json
 import time
+import pypinyin
 
 # Convert spider json files to markdown file
 
@@ -12,6 +13,14 @@ def get_human_time():
     ta = time.localtime(ts)
     t = time.strftime(fmt, ta)
     return t
+
+# 将汉字转换为拼音
+def word2pinyin(word):
+    s = ''
+    for i in pypinyin.pinyin( word, style=pypinyin.NORMAL):
+        s += ''.join(i)
+    
+    return s
 
 # markdown file name pattern "唐-李白-静夜思"
 def save_to_markdown(json_content, markdown_file):
@@ -42,6 +51,11 @@ if __name__ == "__main__":
         for file_name in file_names:
             full_json_file = os.path.join(parent, file_name)
             markdown_file = markdown_files + file_name
-            with open(full_json_file, 'r') as fp:
+            with open(full_json_file, 'r') as fp:                
+                print(full_json_file)                
                 json_content = json.load(fp)
-                save_to_markdown(json_content, '')
+                md_file_name = json_content['p_dynasty'] + '-' + json_content['p_author'] + '-' + json_content['p_title'] + '.md'
+                md_file_name = word2pinyin(md_file_name)
+                md_file_name = markdown_files + md_file_name
+
+                save_to_markdown(json_content, md_file_name)
