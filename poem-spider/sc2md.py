@@ -26,15 +26,20 @@ def word2pinyin(word):
 def save_to_markdown(json_content, markdown_file):
     md_string = ''
     hexo_date = get_human_time()
+    # print(json_content)
+    urldynasty = word2pinyin(json_content['p_dynasty'].strip())
+    urlauthor = word2pinyin(json_content['p_author'].strip())
     hexo_top = '''---
 title: {hexo_title}
 date: {hexo_date}
-tag: 
----\n'''.format(hexo_title=json_content['p_title'], hexo_date=hexo_date)
+urldynasty: {urldynasty}
+urlauthor: {urlauthor}
+---\n'''.format(hexo_title=json_content['p_title'], hexo_date=hexo_date, urldynasty = urldynasty, urlauthor = urlauthor)
 
     md_string += hexo_top
 
     md_string += '## ' + json_content['p_title'] + '\n'
+    # md_string += '## ' + json_content['p_title'] + '\n'
     md_string += '\n'
     md_string += '> ' + json_content['p_author'] + ' \n'
     md_string += '\n'
@@ -42,10 +47,13 @@ tag:
 
     if markdown_file is not '':
         # print(md_string)
-        with open( markdown_file, 'w') as fp:
-            fp.write(md_string)
-        fp.close()
-        print( "Saved to : " + markdown_file)
+        try:
+            with open( markdown_file, 'w') as fp:
+                fp.write(md_string)
+            fp.close()
+            print( "Saved to : " + markdown_file)
+        except:
+            print(" Error save to : " + markdown_file)
 
 
 
@@ -59,7 +67,7 @@ if __name__ == "__main__":
             with open(full_json_file, 'r') as fp:                
                 # print(full_json_file)                
                 json_content = json.load(fp)
-                md_file_name = json_content['p_dynasty'] + '-' + json_content['p_author'] + '-' + json_content['p_title'] + '.md'
+                md_file_name = json_content['p_dynasty'] + '-' + json_content['p_author'] + '-' + json_content['p_title'].strip() + '.md'
                 md_file_name = word2pinyin(md_file_name)
                 md_file_name = markdown_files + md_file_name
 
